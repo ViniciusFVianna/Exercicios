@@ -13,44 +13,56 @@ class _LoginPageState extends State<LoginPage> {
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextFormField(
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              style: new TextStyle(color: Colors.white, fontSize: 12,),
-              decoration: InputDecoration(
-                labelText: "CPF",
-                labelStyle: TextStyle(color: Colors.white,),
-              ),
-            ),
-            TextFormField(
-              autofocus: true,
-              obscureText: true,
-              keyboardType: TextInputType.text,
-              style: new TextStyle(color: Colors.white, fontSize: 12,),
-              decoration: InputDecoration(
-                labelText: "Senha",
-                labelStyle: TextStyle(color: Colors.white,),
-              ),
-            ),
-            Divider(),
-            ButtonTheme(
-              height: 60.0,
-              child: RaisedButton(
-                child: Text(
-                  "Entrar",
-                  style: TextStyle(color: Colors.deepPurple),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
                 ),
-                color: Colors.white,
-                onPressed: () {},
+                decoration: InputDecoration(
+                  labelText: "CPF",
+                  labelStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ],
+              TextFormField(
+                autofocus: false,
+                obscureText: true,
+                keyboardType: TextInputType.text,
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+                decoration: InputDecoration(
+                  labelText: "Senha",
+                  labelStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Divider(),
+              ButtonTheme(
+                height: 60.0,
+                child: RaisedButton(
+                  child: Text(
+                    "Entrar",
+                    style: TextStyle(
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                  color: Colors.white,
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
