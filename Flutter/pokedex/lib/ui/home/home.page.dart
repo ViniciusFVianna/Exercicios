@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pokedex/conts/contsApp.dart';
 import 'package:pokedex/models/pokeapi.dart';
 import 'package:pokedex/stores/pokiapi_store.dart';
 import 'package:pokedex/ui/home/widgets/appBarHome.dart';
+import 'package:pokedex/ui/home/widgets/pokemonItem.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -54,15 +56,48 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     child: Observer(
                       builder: (BuildContext context) {
-                        PokeAPI _pokeAPI = pokeAPIStore.pokeAPI;
-                        return (_pokeAPI != null)
-                            ? ListView.builder(
-                                itemCount: _pokeAPI.pokemon.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    title: Text(_pokeAPI.pokemon[index].name),
-                                  );
-                                },
+                        return (pokeAPIStore.pokeAPI != null)
+                            ? AnimationLimiter(
+                                child: GridView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  padding: EdgeInsets.all(12),
+                                  addAutomaticKeepAlives: false,
+                                  gridDelegate:
+                                      new SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2),
+                                  itemCount:
+                                      pokeAPIStore.pokeAPI.pokemon.length,
+                                  itemBuilder: (context, index) {
+                                    Pokemon pokemon =
+                                        pokeAPIStore.getPokemon(index);
+                                    return AnimationConfiguration.staggeredGrid(
+                                      position: index,
+                                      duration:
+                                          const Duration(milliseconds: 375),
+                                      columnCount: 2,
+                                      child: ScaleAnimation(
+                                        child: GestureDetector(
+                                          child: PokemonItem(
+                                            index: index,
+                                            nome: pokemon.name,
+                                            num: pokemon.num,
+                                            types: pokemon.type,
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          Container(),
+                                                  fullscreenDialog: true,
+                                                ));
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               )
                             : Center(
                                 child: CircularProgressIndicator(),
