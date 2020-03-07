@@ -7,6 +7,7 @@ import 'package:mobx/mobx.dart';
 import 'package:pokedex/conts/consts_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:pokedex/models/pokeapi.dart';
+
 part 'pokiapi_store.g.dart';
 
 class PokeAPIStore = _PokeAPIStoreBase with _$PokeAPIStore;
@@ -15,8 +16,17 @@ abstract class _PokeAPIStoreBase with Store {
   @observable
   PokeAPI _pokeAPI;
 
+  @observable
+  Pokemon _pokemonAtual;
+
+  @observable
+  Color corPokemon;
+
   @computed
   PokeAPI get pokeAPI => _pokeAPI;
+
+  @computed
+  Pokemon get pokemonAtual => _pokemonAtual;
 
   @action
   fetchPokemonList() {
@@ -26,9 +36,14 @@ abstract class _PokeAPIStoreBase with Store {
     });
   }
 
-  @action
-  getPokemon(int index) {
+  Pokemon getPokemon({int index}) {
     return _pokeAPI.pokemon[index];
+  }
+
+  @action
+  setPokemonAtual({int index}) {
+    _pokemonAtual = _pokeAPI.pokemon[index];
+    corPokemon = ConstsAPI.getColorType(type: _pokemonAtual.type[0]);
   }
 
   @action
@@ -48,7 +63,7 @@ abstract class _PokeAPIStoreBase with Store {
       var decodeJson = jsonDecode(response.body);
       return PokeAPI.fromJson(decodeJson);
     } catch (error, stacktrace) {
-      print("Erro ao carregar lista");
+      print("Erro ao carregar lista" + stacktrace.toString());
       return null;
     }
   }

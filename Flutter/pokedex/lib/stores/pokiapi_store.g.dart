@@ -14,6 +14,12 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
   @override
   PokeAPI get pokeAPI =>
       (_$pokeAPIComputed ??= Computed<PokeAPI>(() => super.pokeAPI)).value;
+  Computed<Pokemon> _$pokemonAtualComputed;
+
+  @override
+  Pokemon get pokemonAtual =>
+      (_$pokemonAtualComputed ??= Computed<Pokemon>(() => super.pokemonAtual))
+          .value;
 
   final _$_pokeAPIAtom = Atom(name: '_PokeAPIStoreBase._pokeAPI');
 
@@ -32,6 +38,40 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
     }, _$_pokeAPIAtom, name: '${_$_pokeAPIAtom.name}_set');
   }
 
+  final _$_pokemonAtualAtom = Atom(name: '_PokeAPIStoreBase._pokemonAtual');
+
+  @override
+  Pokemon get _pokemonAtual {
+    _$_pokemonAtualAtom.context.enforceReadPolicy(_$_pokemonAtualAtom);
+    _$_pokemonAtualAtom.reportObserved();
+    return super._pokemonAtual;
+  }
+
+  @override
+  set _pokemonAtual(Pokemon value) {
+    _$_pokemonAtualAtom.context.conditionallyRunInAction(() {
+      super._pokemonAtual = value;
+      _$_pokemonAtualAtom.reportChanged();
+    }, _$_pokemonAtualAtom, name: '${_$_pokemonAtualAtom.name}_set');
+  }
+
+  final _$corPokemonAtom = Atom(name: '_PokeAPIStoreBase.corPokemon');
+
+  @override
+  Color get corPokemon {
+    _$corPokemonAtom.context.enforceReadPolicy(_$corPokemonAtom);
+    _$corPokemonAtom.reportObserved();
+    return super.corPokemon;
+  }
+
+  @override
+  set corPokemon(Color value) {
+    _$corPokemonAtom.context.conditionallyRunInAction(() {
+      super.corPokemon = value;
+      _$corPokemonAtom.reportChanged();
+    }, _$corPokemonAtom, name: '${_$corPokemonAtom.name}_set');
+  }
+
   final _$_PokeAPIStoreBaseActionController =
       ActionController(name: '_PokeAPIStoreBase');
 
@@ -46,10 +86,10 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
   }
 
   @override
-  dynamic getPokemon(int index) {
+  dynamic setPokemonAtual({int index}) {
     final _$actionInfo = _$_PokeAPIStoreBaseActionController.startAction();
     try {
-      return super.getPokemon(index);
+      return super.setPokemonAtual(index: index);
     } finally {
       _$_PokeAPIStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -67,7 +107,8 @@ mixin _$PokeAPIStore on _PokeAPIStoreBase, Store {
 
   @override
   String toString() {
-    final string = 'pokeAPI: ${pokeAPI.toString()}';
+    final string =
+        'corPokemon: ${corPokemon.toString()},pokeAPI: ${pokeAPI.toString()},pokemonAtual: ${pokemonAtual.toString()}';
     return '{$string}';
   }
 }
