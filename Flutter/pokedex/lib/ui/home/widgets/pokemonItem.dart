@@ -4,7 +4,7 @@ import 'package:pokedex/conts/consts_api.dart';
 import 'package:pokedex/conts/contsApp.dart';
 
 class PokemonItem extends StatelessWidget {
-  final String nome;
+  final String name;
   final int index;
   final Color color;
   final String num;
@@ -12,7 +12,7 @@ class PokemonItem extends StatelessWidget {
 
   Widget setTipos() {
     List<Widget> lista = [];
-    types.forEach((nome) {
+    types.forEach((name) {
       lista.add(
         Column(
           children: <Widget>[
@@ -24,7 +24,7 @@ class PokemonItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Text(
-                  nome.trim(),
+                  name.trim(),
                   style: TextStyle(
                       fontFamily: 'Google',
                       fontSize: 12,
@@ -48,7 +48,7 @@ class PokemonItem extends StatelessWidget {
 
   const PokemonItem({
     Key key,
-    this.nome,
+    this.name,
     this.index,
     this.color,
     this.num,
@@ -72,6 +72,20 @@ class PokemonItem extends StatelessWidget {
             children: <Widget>[
               Stack(
                 children: <Widget>[
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Hero(
+                      tag: name + 'rotation',
+                      child: Opacity(
+                        opacity: 0.2,
+                        child: Image.asset(
+                          ConstsApp.whitePokeball,
+                          height: 80,
+                          width: 80,
+                        ),
+                      ),
+                    ),
+                  ),
                   Column(
                     //mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +93,7 @@ class PokemonItem extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                         child: Text(
-                          nome,
+                          name,
                           style: TextStyle(
                             fontFamily: 'Google',
                             fontSize: 18,
@@ -97,24 +111,11 @@ class PokemonItem extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Hero(
-                      tag: index.toString(),
-                      child: Opacity(
-                        opacity: 0.2,
-                        child: Image.asset(
-                          ConstsApp.whitePokeball,
-                          height: 80,
-                          width: 80,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      tag: name,
                       child: CachedNetworkImage(
                         height: 100,
                         width: 100,
+                        alignment: Alignment.bottomRight,
                         placeholder: (context, url) => new Container(
                           color: Colors.transparent,
                         ),

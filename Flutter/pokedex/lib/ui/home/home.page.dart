@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                                         child: GestureDetector(
                                           child: PokemonItem(
                                             index: index,
-                                            nome: pokemon.name,
+                                            name: pokemon.name,
                                             num: pokemon.num,
                                             types: pokemon.type,
                                           ),
