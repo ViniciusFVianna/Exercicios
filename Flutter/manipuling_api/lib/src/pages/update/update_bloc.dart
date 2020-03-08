@@ -1,8 +1,8 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:manipuling_api/src/pages/home/home_repository.dart';
+import 'package:manipuling_api/src/shared/models/post_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:tratar_erros_dio/src/pages/home/home_repository.dart';
-import 'package:tratar_erros_dio/src/shared/models/post_model.dart';
 
 class UpdateBloc extends BlocBase {
   final HomeRepository repo;

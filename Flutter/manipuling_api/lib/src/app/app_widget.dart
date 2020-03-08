@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tratar_erros_dio/src/pages/home/home_module.dart';
+import 'package:manipuling_api/src/pages/home/home_module.dart';
 
 
 class AppWidget extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tratar_erros_dio/src/pages/home/home_module.dart';
-import 'package:tratar_erros_dio/src/shared/models/post_model.dart';
+import 'package:manipuling_api/src/pages/home/home_module.dart';
+import 'package:manipuling_api/src/shared/models/post_model.dart';
 
 import 'update_bloc.dart';
 

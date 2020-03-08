@@ -1,6 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
-import 'package:tratar_erros_dio/src/shared/custom_dio/custom_dio.dart';
+import 'package:manipuling_api/src/shared/custom_dio/custom_dio.dart';
 
 import 'app_bloc.dart';
 import 'app_widget.dart';

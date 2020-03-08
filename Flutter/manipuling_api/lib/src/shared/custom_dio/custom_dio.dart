@@ -1,9 +1,8 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:tratar_erros_dio/src/shared/constants.dart';
-import 'package:tratar_erros_dio/src/shared/custom_dio/interceptors.dart';
-
+import 'package:manipuling_api/src/shared/constants.dart';
+import 'package:manipuling_api/src/shared/custom_dio/interceptors.dart';
 class CustomDio extends Dio{
 
 
