@@ -69,14 +69,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.camera_alt, size: 50,),
+                    icon: Icon(
+                      Icons.camera_alt,
+                      size: 50,
+                      color: Colors.green,
+                    ),
                     onPressed: () {
                       pegarImagemCamera();
                     },
                   ),
-                  SizedBox(width: 60,),
+                  SizedBox(
+                    width: 60,
+                  ),
                   IconButton(
-                    icon: Icon(Icons.image, size: 50,),
+                    icon: Icon(
+                      Icons.image,
+                      size: 50,
+                      color: Colors.blue,
+                    ),
                     onPressed: () {
                       pegarImagemGaleria();
                     },
