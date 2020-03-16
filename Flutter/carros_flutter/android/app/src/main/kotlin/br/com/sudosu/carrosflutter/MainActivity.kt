@@ -1,4 +1,4 @@
-package com.example.carros_flutter
+package br.com.sudosu.carrosflutter
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

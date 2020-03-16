@@ -1,1 +1,0 @@
-const String BASE_URL = "http://livrowebservices.com.br/rest/carros/";
