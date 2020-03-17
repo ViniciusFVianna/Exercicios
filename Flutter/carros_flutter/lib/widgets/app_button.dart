@@ -4,9 +4,9 @@ class AppButton extends StatelessWidget {
 
   String label;
   Function onPressed;
+  bool showProgress;
 
-
-  AppButton(this.label, {this.onPressed});
+  AppButton(this.label, {this.onPressed, this.showProgress = false});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,9 @@ class AppButton extends StatelessWidget {
       height: 46,
       child: RaisedButton(
         color: Colors.blue,
-        child: Text(
+        child: showProgress ? Center( child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),) : Text(
           label,
           style: TextStyle(
             color: Colors.white,

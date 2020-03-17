@@ -15,7 +15,7 @@ class _OnboardingState extends State<Onboarding> {
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
     for (int i = 0; i < _numPages; i++) {
-      list.add(i == _currentPage ? _indicator(true) : _indicator(true));
+      list.add(i == _currentPage ? _indicator(true) : _indicator(false));
     }
     return list;
   }

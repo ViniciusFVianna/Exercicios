@@ -1,9 +1,13 @@
+import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/pages/home/home_page.dart';
-import 'package:carrosflutter/pages/login/login_api.dart';
+import 'package:carrosflutter/services/login_api.dart';
+import 'package:carrosflutter/services/api_response.dart';
+import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
 
   var _formKey = GlobalKey<FormState>();
   var _focusSenha = FocusNode();
+
+  bool _showProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
             AppButton(
               "Login",
               onPressed: _onClickLogin,
+              showProgress: _showProgress,
             ),
           ],
         ),
@@ -76,12 +83,26 @@ class _LoginPageState extends State<LoginPage> {
     String senha = _tSenha.text;
     print("login >> $login \nsenha >> $senha");
 
-   bool ok = await LoginApi.login(login, senha);
-   if(ok){
-     push(context, HomePage());
-   }else{
-     print("Login incorreto");
+    setState(() {
+      _showProgress = true;
+    });
+
+   ApiResponse response = await LoginApi.login(login, senha);
+
+   if(response.ok) {
+     Usuario user = response.result;
+
+     print(">> $user");
+
+     push(context, HomePage(), replase: true);
+   }else {
+     print(response.msg);
+     alert(context, response.msg);
    }
+
+    setState(() {
+      _showProgress = false;
+    });
   }
 
   String _validateLogin(String value) {
