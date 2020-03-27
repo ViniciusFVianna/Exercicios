@@ -1,4 +1,5 @@
 class Carro {
+
   int id;
   String nome;
   String tipo;
@@ -8,16 +9,15 @@ class Carro {
   String latitude;
   String longitude;
 
-  Carro({
-    this.id,
-    this.nome,
-    this.tipo,
-    this.descricao,
-    this.urlFoto,
-    this.urlVideo,
-    this.latitude,
-    this.longitude,
-  });
+  Carro(
+      {this.id,
+      this.nome,
+      this.tipo,
+      this.descricao,
+      this.urlFoto,
+      this.urlVideo,
+      this.latitude,
+      this.longitude});
 
   Carro.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -42,4 +42,5 @@ class Carro {
     data['longitude'] = this.longitude;
     return data;
   }
+  
 }

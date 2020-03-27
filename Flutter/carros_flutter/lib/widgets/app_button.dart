@@ -13,7 +13,7 @@ class AppButton extends StatelessWidget {
     return Container(
       height: 46,
       child: RaisedButton(
-        color: Colors.blue,
+        color: Colors.deepPurple,
         child: showProgress ? Center( child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),) : Text(

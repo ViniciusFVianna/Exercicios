@@ -7,7 +7,6 @@ import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,6 +21,19 @@ class _LoginPageState extends State<LoginPage> {
   var _focusSenha = FocusNode();
 
   bool _showProgress = false;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future<Usuario> futureUsuario = Usuario.get();
+    futureUsuario.then((Usuario user) {
+     if(user != null){
+       push(context, HomePage(), replase: true);
+     }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
