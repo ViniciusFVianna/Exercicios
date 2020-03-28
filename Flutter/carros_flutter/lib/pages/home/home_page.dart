@@ -1,7 +1,6 @@
-import 'package:carrosflutter/models/carro.dart';
+import 'package:carrosflutter/pages/carros/carros_page.dart';
 import 'package:carrosflutter/services/carros_api.dart';
 import 'package:carrosflutter/utils/prefs.dart';
-import 'package:carrosflutter/widgets/carros_listview.dart';
 import 'package:carrosflutter/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
 
@@ -56,9 +55,9 @@ _tabController = TabController(length: 3, vsync: this);
       ),
       drawer: DrawerList(),
       body: _tabController == null ? Center( child: CircularProgressIndicator(),) : TabBarView(controller: _tabController, children: [
-        CarrosListView(TipoCarro.classicos),
-        CarrosListView(TipoCarro.esportivos),
-        CarrosListView(TipoCarro.luxo),
+        CarrosPage(TipoCarro.classicos),
+        CarrosPage(TipoCarro.esportivos),
+        CarrosPage(TipoCarro.luxo),
       ]),
     );
   }

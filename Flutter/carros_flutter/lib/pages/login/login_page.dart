@@ -25,18 +25,6 @@ class _LoginPageState extends State<LoginPage> {
 
   final _bloc = LoginBloc();
 
-@override
-  void initState() {
-    super.initState();
-
-    Future<Usuario> futureUsuario = Usuario.get();
-    futureUsuario.then((Usuario user) {
-     if(user != null){
-       push(context, HomePage(), replase: true);
-     }
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();

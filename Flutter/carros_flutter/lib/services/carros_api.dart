@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/models/usuario.dart';
+import 'package:carrosflutter/pages/favoritos/carro_dao.dart';
 import 'package:http/http.dart' as http;
 
 class TipoCarro {
@@ -18,6 +19,8 @@ class CarrosApi {
 //final url = 'http://carros-springboot.herokuapp.com/api/v1/carros';
     var url = "https://carros-springboot.herokuapp.com/api/v2/carros/tipo/$tipo";
 
+    print("GET > $url");
+
     final headers = {
       "Content-Type": "application/json",
       "Authorization": "Bearer ${user.token}"
@@ -26,6 +29,12 @@ class CarrosApi {
     final response = await http.get(url, headers: headers);
     final List dados = jsonDecode(response.body);
 
-    return dados.map<Carro>((c) => Carro.fromJson(c)).toList();
+    List<Carro> carros = dados.map<Carro>((c) => Carro.fromMap(c)).toList();
+
+    final dao = CarroDAO();
+
+    carros.forEach(dao.save);
+
+    return carros;
   }
 }
