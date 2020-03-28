@@ -17,7 +17,8 @@ class CarrosApi {
     print("TOKEN >> ${user.token}");
 
 //final url = 'http://carros-springboot.herokuapp.com/api/v1/carros';
-    var url = 'https://carros-springboot.herokuapp.com/api/v2/carros/tipo/$tipo';
+    var url =
+        'https://carros-springboot.herokuapp.com/api/v2/carros/tipo/$tipo';
 
     print("GET > $url");
 
@@ -38,6 +39,46 @@ class CarrosApi {
     Usuario user = await Usuario.get();
     var url = 'https://carros-springboot.herokuapp.com/api/v2/carros';
 
+    if (c.id != null) {
+      url += "/${c.id}";
+    }
+
+    print("POST > $url");
+    String json = c.toJson();
+
+    final headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${user.token}"
+    };
+
+    var response = await (c.id == null
+        ? http.post(url, body: json, headers: headers)
+        : http.put(url, body: json, headers: headers));
+
+    try {
+      print("RESPONSE STATUS: ${response.statusCode}");
+      print("RESPONSE BODY: ${response.body}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map mapResponse = jsonDecode(response.body);
+        Carro carro = Carro.fromMap(mapResponse);
+        print("Novo carro: ${carro.id}");
+        return ApiResponse.ok(true);
+      }
+
+      if (response.body == null || response.body.isEmpty) {
+        return ApiResponse.error("Não foi possível salva o carro");
+      }
+    } catch (e) {
+      Map mapResponse = jsonDecode(response.body);
+      return ApiResponse.error(mapResponse["error"]);
+    }
+  }
+
+  static Future<ApiResponse<bool>> updadte(Carro c) async {
+    Usuario user = await Usuario.get();
+    var url = 'https://carros-springboot.herokuapp.com/api/v2/carros';
+
     print("POST > $url");
     String json = c.toJson();
 
@@ -51,7 +92,7 @@ class CarrosApi {
     print("RESPONSE STATUS: ${response.statusCode}");
     print("RESPONSE BODY: ${response.body}");
 
-    if(response.statusCode == 201){
+    if (response.statusCode == 201) {
       Map mapResponse = jsonDecode(response.body);
       Carro carro = Carro.fromMap(mapResponse);
       print("Novo carro: ${carro.id}");
@@ -59,7 +100,6 @@ class CarrosApi {
     }
 
     Map mapResponse = jsonDecode(response.body);
-    return ApiResponse.erro( mapResponse["error"]);
-
+    return ApiResponse.error(mapResponse["error"]);
   }
 }

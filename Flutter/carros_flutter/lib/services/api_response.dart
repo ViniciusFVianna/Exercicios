@@ -9,10 +9,7 @@ class ApiResponse<T>{
     ok = true;
   }
 
-  ApiResponse.error(this.resCode, this.msg){
-    ok = false;
-  }
-  ApiResponse.erro(this.msg){
+  ApiResponse.error(this.msg){
     ok = false;
   }
 }

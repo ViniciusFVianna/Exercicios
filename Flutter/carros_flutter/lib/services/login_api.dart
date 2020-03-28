@@ -26,11 +26,11 @@ class LoginApi {
         user.save();
         return ApiResponse.ok(user);
       } else {
-        return ApiResponse.error(response.statusCode, dados['error']);
+        return ApiResponse.error(dados['error']);
       }
     } catch (error, exception) {
       print('Erro na chamada login $error > $exception');
-      return (ApiResponse.error(-1, 'Erro na chamada login'));
+      return (ApiResponse.error('Erro na chamada login'));
     }
   }
 }
