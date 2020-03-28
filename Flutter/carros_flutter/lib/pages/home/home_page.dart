@@ -1,7 +1,9 @@
+import 'package:carrosflutter/pages/carros/carro_form_page.dart';
 import 'package:carrosflutter/pages/carros/carros_page.dart';
 import 'package:carrosflutter/pages/favoritos/favoritos_page.dart';
 import 'package:carrosflutter/services/carros_api.dart';
 import 'package:carrosflutter/utils/alert.dart';
+import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/utils/prefs.dart';
 import 'package:carrosflutter/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +79,6 @@ _tabController = TabController(length: 4, vsync: this);
   }
 
   void _onClickAdicionarCarro(){
-    alert(context, "Adicionar carro!");
+    push(context, CarroFormPage(), replase: false);
   }
 }

@@ -12,4 +12,7 @@ class ApiResponse<T>{
   ApiResponse.error(this.resCode, this.msg){
     ok = false;
   }
+  ApiResponse.erro(this.msg){
+    ok = false;
+  }
 }

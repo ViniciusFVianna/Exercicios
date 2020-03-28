@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
+import 'package:carrosflutter/pages/carros/carro_form_page.dart';
 import 'package:carrosflutter/services/favorito_service.dart';
 import 'package:carrosflutter/services/loripsum_api.dart';
+import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/text.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +55,7 @@ class _CarroPageState extends State<CarroPage> {
               onPressed: _onClickVideo,
             ),
             PopupMenuButton<String>(
-                onSelected: (value) => _onClickPopupMenu,
+                onSelected: _onClickPopupMenu,
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem(
@@ -90,10 +92,13 @@ class _CarroPageState extends State<CarroPage> {
   _onClickPopupMenu(String value) {
     switch (value) {
       case "Editar":
+        push(context, CarroFormPage(carro: carro));
         break;
       case "Deletar":
+        print("Deletar!!!");
         break;
       case "Share":
+        print("Share!!!");
         break;
     }
   }
