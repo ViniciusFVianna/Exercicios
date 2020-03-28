@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/pages/carros/carro_page.dart';
 import 'package:carrosflutter/utils/nav.dart';
@@ -25,8 +26,7 @@ class CarrosListView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                    child: Image.network(
-                      c.urlFoto ??
+                    child: CachedNetworkImage(imageUrl: c.urlFoto ??
                           "http://www.livroandroid.com.br/livro/carros/classicos/Cadillac_Deville_Convertible.png",
                       width: 250,
                     ),

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/models/usuario.dart';
-import 'package:carrosflutter/pages/favoritos/carro_dao.dart';
+import 'package:carrosflutter/pages/carros/carro_dao.dart';
 import 'package:http/http.dart' as http;
 
 class TipoCarro {
@@ -30,10 +30,6 @@ class CarrosApi {
     final List dados = jsonDecode(response.body);
 
     List<Carro> carros = dados.map<Carro>((c) => Carro.fromMap(c)).toList();
-
-    final dao = CarroDAO();
-
-    carros.forEach(dao.save);
 
     return carros;
   }

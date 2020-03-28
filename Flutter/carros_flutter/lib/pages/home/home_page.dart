@@ -1,5 +1,7 @@
 import 'package:carrosflutter/pages/carros/carros_page.dart';
+import 'package:carrosflutter/pages/favoritos/favoritos_page.dart';
 import 'package:carrosflutter/services/carros_api.dart';
+import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/prefs.dart';
 import 'package:carrosflutter/widgets/drawer_list.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ _initTabs();
   _initTabs() async{
 int tabIdx = await Prefs.getInt("tabIdx");
 
-_tabController = TabController(length: 3, vsync: this);
+_tabController = TabController(length: 4, vsync: this);
 
       setState(() {
         _tabController.index = tabIdx;
@@ -44,12 +46,19 @@ _tabController = TabController(length: 3, vsync: this);
         ? null : TabBar(controller: _tabController, tabs: [
           Tab(
             text: "Clássicos",
+            icon: Icon(Icons.directions_car),
           ),
           Tab(
             text: "Esportivos",
+            icon: Icon(Icons.directions_car),
           ),
           Tab(
             text: "Luxo",
+            icon: Icon(Icons.directions_car),
+          ),
+          Tab(
+            text: "Favoritos",
+            icon: Icon(Icons.favorite),
           ),
         ]),
       ),
@@ -58,7 +67,16 @@ _tabController = TabController(length: 3, vsync: this);
         CarrosPage(TipoCarro.classicos),
         CarrosPage(TipoCarro.esportivos),
         CarrosPage(TipoCarro.luxo),
+        FavoritosPage(),
       ]),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: _onClickAdicionarCarro,
+      ),
     );
+  }
+
+  void _onClickAdicionarCarro(){
+    alert(context, "Adicionar carro!");
   }
 }

@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
+import 'package:carrosflutter/services/favorito_service.dart';
 import 'package:carrosflutter/services/loripsum_api.dart';
 import 'package:carrosflutter/widgets/text.dart';
 import 'package:flutter/material.dart';
 
 class CarroPage extends StatefulWidget {
   Carro carro;
+
   CarroPage(this.carro);
 
   @override
@@ -14,16 +17,23 @@ class CarroPage extends StatefulWidget {
 class _CarroPageState extends State<CarroPage> {
   final _loreipsumBloc = LoreipsumBloc();
 
+  Color color = Colors.grey;
+
+  Carro get carro => widget.carro;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loreipsumBloc.fetch();
+    FavoritoService.isFavorito(carro).then((favorito){
+      setState(() {
+        color = favorito ? Colors.red : Colors.grey;
+      });
+    });
   }
 
-@override
+  @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _loreipsumBloc.dispose();
   }
@@ -69,6 +79,14 @@ class _CarroPageState extends State<CarroPage> {
 
   _onClickMapa() {}
 
+  _onclickFavorito() async {
+    bool favorito = await FavoritoService.favoritar(carro);
+
+    setState(() {
+      color = favorito ? Colors.red : Colors.grey;
+    });
+  }
+
   _onClickPopupMenu(String value) {
     switch (value) {
       case "Editar":
@@ -85,7 +103,9 @@ class _CarroPageState extends State<CarroPage> {
       padding: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
-          Image.network(widget.carro.urlFoto),
+          CachedNetworkImage(
+            imageUrl: widget.carro.urlFoto,
+          ),
           _bloco1(),
           Divider(),
           _bloco2(),
@@ -109,9 +129,9 @@ class _CarroPageState extends State<CarroPage> {
           children: <Widget>[
             IconButton(
                 icon: Icon(Icons.favorite),
-                color: Colors.red,
+                color: color,
                 iconSize: 40,
-                onPressed: () {}),
+                onPressed: () => _onclickFavorito()),
             IconButton(
               icon: Icon(Icons.share),
               color: Colors.grey,
