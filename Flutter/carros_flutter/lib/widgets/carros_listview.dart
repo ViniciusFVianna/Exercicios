@@ -1,45 +1,64 @@
+import 'dart:async';
+
 import 'package:carrosflutter/models/carro.dart';
+import 'package:carrosflutter/pages/carro/carro_page.dart';
+import 'package:carrosflutter/pages/carro/carros_bloc.dart';
 import 'package:carrosflutter/services/carros_api.dart';
+import 'package:carrosflutter/utils/nav.dart';
+import 'package:carrosflutter/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 
 class CarrosListView extends StatefulWidget {
-String tipo;
+  String tipo;
 
-CarrosListView(this.tipo);
+  CarrosListView(this.tipo);
 
   @override
   _CarrosListViewState createState() => _CarrosListViewState();
 }
 
-class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAliveClientMixin<CarrosListView> {
+class _CarrosListViewState extends State<CarrosListView>
+    with AutomaticKeepAliveClientMixin<CarrosListView> {
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-  
+
+  List<Carro> carros;
+  String get tipo => widget.tipo;
+  final _bloc = CarrosBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc.fetch(tipo);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return _body();
   }
 
-  _body() {
-Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo); 
+  void _fetch() {
+    _bloc.fetch(tipo);
+  }
 
-    return FutureBuilder(
-      future: future,
+  _body() {
+    return StreamBuilder(
+      stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(
-              child: Text(
-            "Não foi possivel buscar os carros",
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ));
+          return TextError(
+            "Não foi possível buscar os caros \n\n Clique para tentar novamente",
+            onPressed: _fetch,
+          );
         }
-
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -91,7 +110,7 @@ Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
                       children: <Widget>[
                         FlatButton(
                           child: const Text('DETALHES'),
-                          onPressed: () {},
+                          onPressed: () => _onclickCarro(c),
                         ),
                         FlatButton(
                           child: const Text('SHARE'),
@@ -107,5 +126,9 @@ Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
         },
       ),
     );
+  }
+
+  _onclickCarro(Carro c) {
+    push(context, CarroPage(c));
   }
 }

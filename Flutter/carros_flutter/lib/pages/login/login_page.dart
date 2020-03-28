@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/pages/home/home_page.dart';
+import 'package:carrosflutter/pages/login/login_bloc.dart';
 import 'package:carrosflutter/services/login_api.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/utils/alert.dart';
@@ -20,11 +23,10 @@ class _LoginPageState extends State<LoginPage> {
   var _formKey = GlobalKey<FormState>();
   var _focusSenha = FocusNode();
 
-  bool _showProgress = false;
+  final _bloc = LoginBloc();
 
 @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     Future<Usuario> futureUsuario = Usuario.get();
@@ -33,6 +35,12 @@ class _LoginPageState extends State<LoginPage> {
        push(context, HomePage(), replase: true);
      }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
   }
 
   @override
@@ -74,10 +82,16 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 20,
             ),
-            AppButton(
-              "Login",
-              onPressed: _onClickLogin,
-              showProgress: _showProgress,
+            StreamBuilder<bool>(
+              stream: _bloc.stream,
+              initialData: false,
+              builder: (context, snapshot) {
+                return AppButton(
+                  "Login",
+                  onPressed: _onClickLogin,
+                  showProgress: snapshot.data,
+                );
+              }
             ),
           ],
         ),
@@ -95,11 +109,7 @@ class _LoginPageState extends State<LoginPage> {
     String senha = _tSenha.text;
     print("login >> $login \nsenha >> $senha");
 
-    setState(() {
-      _showProgress = true;
-    });
-
-   ApiResponse response = await LoginApi.login(login, senha);
+   ApiResponse response = await _bloc.login(login, senha);
 
    if(response.ok) {
      Usuario user = response.result;
@@ -111,10 +121,6 @@ class _LoginPageState extends State<LoginPage> {
      print(response.msg);
      alert(context, response.msg);
    }
-
-    setState(() {
-      _showProgress = false;
-    });
   }
 
   String _validateLogin(String value) {
