@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:carrosflutter/models/carro.dart';
-import 'package:carrosflutter/pages/carros/carro_page.dart';
 import 'package:carrosflutter/pages/carros/carros_bloc.dart';
-import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/carros_listview.dart';
 import 'package:carrosflutter/widgets/text_error.dart';
 import 'package:flutter/material.dart';

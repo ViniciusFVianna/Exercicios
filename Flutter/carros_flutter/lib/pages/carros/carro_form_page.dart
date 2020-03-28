@@ -214,11 +214,11 @@ class _CarroFormPageState extends State<CarroFormPage> {
     print("Salvar o carro $c");
     ApiResponse<bool> response = await CarrosApi.save(c);
     if (response.ok) {
-      alert(context, "Carro salvo com sucesso");
-    } else {
-      alert(context, response.msg, callback: () {
+      alert(context, "Carro salvo com sucesso", callback: () {
         pop(context);
       });
+    } else {
+      alert(context, response.msg,);
     }
 
     await Future.delayed(Duration(seconds: 3));

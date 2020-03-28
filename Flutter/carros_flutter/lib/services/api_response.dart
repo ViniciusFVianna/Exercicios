@@ -12,4 +12,8 @@ class ApiResponse<T>{
   ApiResponse.error(this.msg){
     ok = false;
   }
+
+  ApiResponse.msg(this.msg){
+    ok = true;
+  }
 }

@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/pages/carros/carro_form_page.dart';
+import 'package:carrosflutter/services/api_response.dart';
+import 'package:carrosflutter/services/carros_api.dart';
 import 'package:carrosflutter/services/favorito_service.dart';
 import 'package:carrosflutter/services/loripsum_api.dart';
+import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/text.dart';
 import 'package:flutter/material.dart';
@@ -95,11 +98,21 @@ class _CarroPageState extends State<CarroPage> {
         push(context, CarroFormPage(carro: carro));
         break;
       case "Deletar":
-        print("Deletar!!!");
+        _deletar();
         break;
       case "Share":
         print("Share!!!");
         break;
+    }
+  }
+
+  void _deletar() async {
+    ApiResponse<bool> response = await CarrosApi.delete(carro);
+    if (response.ok) {
+
+      alert(context, "Carro excluído com sucesso!", callback: () {
+        pop(context);
+      });
     }
   }
 
@@ -109,7 +122,7 @@ class _CarroPageState extends State<CarroPage> {
       child: ListView(
         children: <Widget>[
           CachedNetworkImage(
-            imageUrl: widget.carro.urlFoto,
+            imageUrl: widget.carro.urlFoto ?? "http://www.livroandroid.com.br/livro/carros/classicos/Cadillac_Deville_Convertible.png",
           ),
           _bloco1(),
           Divider(),
