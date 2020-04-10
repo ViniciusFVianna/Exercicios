@@ -13,7 +13,6 @@ class FavoritosPage extends StatefulWidget {
 class _FavoritosPageState extends State<FavoritosPage>
     with AutomaticKeepAliveClientMixin<FavoritosPage> {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override

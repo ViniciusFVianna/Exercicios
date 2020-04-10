@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/carros_api.dart';
-import 'package:carrosflutter/services/upload_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/nav.dart';
@@ -255,11 +254,5 @@ class _CarroFormPageState extends State<CarroFormPage> {
     setState(() {
       _image = _imaeTemp;
     });
-  }
-
-  void _onClickUpload() {
-    if (_image != null) {
-      UploadService.upload(_image);
-    }
   }
 }

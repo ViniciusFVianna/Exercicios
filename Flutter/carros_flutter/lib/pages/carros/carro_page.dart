@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/pages/carros/carro_form_page.dart';
+import 'package:carrosflutter/pages/mapa_page.dart';
 import 'package:carrosflutter/pages/video_page.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/carros_api.dart';
@@ -53,7 +54,7 @@ class _CarroPageState extends State<CarroPage> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.place),
-              onPressed: _onClickMapa,
+              onPressed: () => _onClickMapa(context),
             ),
             IconButton(
               icon: Icon(Icons.videocam),
@@ -95,7 +96,13 @@ class _CarroPageState extends State<CarroPage> {
     }
   }
 
-  _onClickMapa() {}
+  _onClickMapa(context) {
+if(carro.latitude != null && carro.longitude != null){
+push(context, MapaPage(carro));
+}else{
+  alert(context, "Este carro não possui coordenadas!", title: "Erro!", callback: () => Navigator.pop(context));
+}
+  }
 
   _onclickFavorito() async {
     bool favorito = await FavoritoService.favoritar(context, carro);

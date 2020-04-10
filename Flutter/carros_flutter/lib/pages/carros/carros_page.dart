@@ -19,7 +19,6 @@ class CarrosPage extends StatefulWidget {
 class _CarrosPageState extends State<CarrosPage>
     with AutomaticKeepAliveClientMixin<CarrosPage> {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   List<Carro> carros;
