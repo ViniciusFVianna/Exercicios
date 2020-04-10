@@ -4,16 +4,12 @@ class ApiResponse<T>{
   T result;
   int resCode;
 
-  ApiResponse.ok(this.result){
+  ApiResponse.ok({this.result, this.msg}){
     resCode = 200;
     ok = true;
   }
 
-  ApiResponse.error(this.msg){
+  ApiResponse.error({this.result, this.msg}){
     ok = false;
-  }
-
-  ApiResponse.msg(this.msg){
-    ok = true;
   }
 }

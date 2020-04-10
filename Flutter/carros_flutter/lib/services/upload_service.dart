@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:carrosflutter/services/api_response.dart';
+import 'package:carrosflutter/utils/carros_contants.dart';
 import 'package:carrosflutter/utils/http_helper.dart' as http;
 import 'package:http/http.dart';
 import 'package:path/path.dart' as path;
@@ -10,7 +11,7 @@ import 'package:path/path.dart' as path;
 class UploadService {
   static Future<ApiResponse<String>> upload(File file) async {
     try {
-      String url = "https://carros-springboot.herokuapp.com/api/v2/upload";
+      String url = "$BASE_URL/upload";
 
       List<int> imageBytes = file.readAsBytesSync();
       String base64Image = base64Encode(imageBytes);
@@ -44,10 +45,10 @@ class UploadService {
 
       String urlFoto = map["url"];
 
-      return ApiResponse.ok(urlFoto);
+      return ApiResponse.ok(result: urlFoto);
     } catch (error, exception) {
       print("Erro ao fazer upload $error - $exception");
-      return ApiResponse.error("Não foi possível fazer o upload");
+      return ApiResponse.error(msg: "Não foi possível fazer o upload");
     }
   }
 

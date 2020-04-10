@@ -12,14 +12,25 @@ class Usuario {
 
   List<String> roles;
 
-  Usuario.fromJson(Map<String, dynamic> map) : 
-    this.id = map['id'],
-    this.login = map['login'],
-    this.nome = map['nome'],
-    this.email = map['email'],
-    this.urlFoto = map['urlFoto'],
-    this.token = map['token'],
-    this.roles =  map['roles'] != null ? map['roles'].map<String>((role) => role.toString()).toList() : null;
+  Usuario({
+    this.id,
+    this.nome,
+    this.login,
+    this.email,
+    this.urlFoto,
+    this.token,
+  });
+
+  Usuario.fromJson(Map<String, dynamic> map)
+      : this.id = map['id'],
+        this.login = map['login'],
+        this.nome = map['nome'],
+        this.email = map['email'],
+        this.urlFoto = map['urlFoto'],
+        this.token = map['token'],
+        this.roles = map['roles'] != null
+            ? map['roles'].map<String>((role) => role.toString()).toList()
+            : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -42,12 +53,13 @@ class Usuario {
     Map map = toJson();
     String json = jsonEncode(map);
     Prefs.setString('user.prefs', json);
-
-  }  
+  }
 
   static Future<Usuario> get() async {
     String json = await Prefs.getString('user.prefs');
-    if(json.isEmpty) { return null; }
+    if (json.isEmpty) {
+      return null;
+    }
     Map map = jsonDecode(json);
     Usuario user = Usuario.fromJson(map);
     return user;
@@ -56,5 +68,4 @@ class Usuario {
   static void clear() {
     Prefs.setString('user.prefs', '');
   }
-
 }

@@ -2,12 +2,15 @@ import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/pages/home/home_page.dart';
 import 'package:carrosflutter/pages/login/login_bloc.dart';
 import 'package:carrosflutter/services/api_response.dart';
+import 'package:carrosflutter/services/firebase_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,6 +25,9 @@ class _LoginPageState extends State<LoginPage> {
   var _focusSenha = FocusNode();
 
   final _bloc = LoginBloc();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
@@ -90,8 +96,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onClickGoogle(){
-    print("Clicou no login");
+  void _onClickGoogle() async{
+    final service = FirebaseService();
+    ApiResponse response = await service.loginGoogle();
+    if(response.ok){
+      push(context, HomePage(), replase: true);
+    }else{
+      alert(context, response.msg);
+    }
   }
 
   void _onClickLogin() async{
@@ -134,4 +146,5 @@ class _LoginPageState extends State<LoginPage> {
     }
     return null;
   }
+
 }
