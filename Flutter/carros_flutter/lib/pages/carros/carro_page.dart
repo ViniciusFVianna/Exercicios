@@ -11,7 +11,6 @@ import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/text.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CarroPage extends StatefulWidget {
   Carro carro;

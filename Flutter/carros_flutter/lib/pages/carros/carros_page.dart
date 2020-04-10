@@ -6,7 +6,6 @@ import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/widgets/carros_listview.dart';
 import 'package:carrosflutter/widgets/text_error.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CarrosPage extends StatefulWidget {
   String tipo;

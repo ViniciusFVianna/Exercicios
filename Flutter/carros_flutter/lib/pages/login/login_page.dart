@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/pages/home/home_page.dart';
 import 'package:carrosflutter/pages/login/login_bloc.dart';
-import 'package:carrosflutter/services/login_api.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/nav.dart';

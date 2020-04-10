@@ -1,8 +1,8 @@
 import 'package:carrosflutter/models/usuario.dart';
-import 'package:carrosflutter/utils/sql/db_helper.dart';
 import 'package:carrosflutter/pages/home/home_page.dart';
 import 'package:carrosflutter/pages/login/login_page.dart';
 import 'package:carrosflutter/utils/nav.dart';
+import 'package:carrosflutter/utils/sql/db_helper.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {

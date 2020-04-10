@@ -1,4 +1,3 @@
-import 'package:carrosflutter/main.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/models/favorito.dart';
 import 'package:carrosflutter/pages/carros/carro_dao.dart';
