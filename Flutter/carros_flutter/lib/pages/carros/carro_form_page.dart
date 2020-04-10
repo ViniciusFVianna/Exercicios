@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/carros_api.dart';
+import 'package:carrosflutter/services/firebase_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
 import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/nav.dart';
@@ -251,6 +252,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
 
   void _onClickCamera() async {
     _imaeTemp = await ImagePicker.pickImage(source: ImageSource.camera);
+    FirebaseService.uploadFirebaseStorage(_imaeTemp);
     setState(() {
       _image = _imaeTemp;
     });

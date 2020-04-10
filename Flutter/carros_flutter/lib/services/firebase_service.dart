@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/favorito_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:path/path.dart' as path;
 
 String firebaseUserUid;
 
@@ -100,7 +105,7 @@ class FirebaseService {
     }
   }
 
-  Future<ApiResponse> cadastrar(String nome, String email, String senha) async {
+  Future<ApiResponse> cadastrar(String nome, String email, String senha, {File file}) async {
     try {
       // Usuario do Firebase
       AuthResult result = await _auth.createUserWithEmailAndPassword(
@@ -113,9 +118,16 @@ class FirebaseService {
       // Dados para atualizar o usuário
       final userUpdateInfo = UserUpdateInfo();
       userUpdateInfo.displayName = nome;
-      userUpdateInfo.photoUrl =
-          "https://s3-sa-east-1.amazonaws.com/livetouch-temp/livrows/foto.png";
 
+      if(file != null){
+        String photoUrl = await FirebaseService.uploadFirebaseStorage(file);
+        userUpdateInfo.photoUrl = photoUrl;
+        print("Foto Url: ${photoUrl}");
+        print("Foto: ${userUpdateInfo.photoUrl}");
+      }else{
+      userUpdateInfo.photoUrl = "https://s3-sa-east-1.amazonaws.com/livetouch-temp/livrows/foto.png";
+       print("else Foto: ${userUpdateInfo.photoUrl}");
+    }
       fUser.updateProfile(userUpdateInfo);
 
       // Resposta genérica
@@ -132,6 +144,17 @@ class FirebaseService {
 
       return ApiResponse.error(msg: "Não foi possível criar um usuário.");
     }
+  }
+
+  static Future<String> uploadFirebaseStorage(File file) async {
+    print("Upload to Storage $file");
+    String fileName = path.basename(file.path);
+    final storageRef = FirebaseStorage.instance.ref().child(fileName);
+
+    final StorageTaskSnapshot task = await storageRef.putFile(file).onComplete;
+    final String urlFoto = await task.ref.getDownloadURL();
+    print("Storage > $urlFoto");
+    return urlFoto;
   }
 
   Future<void> logout() async {

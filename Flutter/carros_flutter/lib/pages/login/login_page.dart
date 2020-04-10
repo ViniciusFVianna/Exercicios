@@ -10,6 +10,7 @@ import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -31,10 +32,23 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-@override
+  @override
   void initState() {
     super.initState();
-    initFcm();
+    // initFcm();
+    RemoteConfig.instance.then((remoteConfig) {
+      remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
+
+      try {
+        remoteConfig.fetch(expiration: const Duration(minutes: 1));
+        remoteConfig.activateFetched();
+      } catch (error) {
+        print("Remote Config: $error");
+      }
+
+      final mensagem = remoteConfig.getString("mensagem"); 
+      print('Mensagem: $mensagem');
+    });
   }
 
   @override
@@ -100,11 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   "Cadastre-se",
                   style: TextStyle(
-                    color: Colors.deepPurple,
-                    decoration: TextDecoration.underline,
-                    fontSize: 22,
-                    fontWeight: FontWeight.normal
-                  ),
+                      color: Colors.deepPurple,
+                      decoration: TextDecoration.underline,
+                      fontSize: 22,
+                      fontWeight: FontWeight.normal),
                 ),
                 onPressed: () => push(context, RegisterPage(), replase: false),
               ),
