@@ -7,6 +7,7 @@ import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -78,10 +79,19 @@ class _LoginPageState extends State<LoginPage> {
                 );
               }
             ),
+            Container(height: 46,
+            margin: EdgeInsets.only(top: 20),
+            child: GoogleSignInButton(
+              onPressed: _onClickGoogle,
+            ),),
           ],
         ),
       ),
     );
+  }
+
+  void _onClickGoogle(){
+    print("Clicou no login");
   }
 
   void _onClickLogin() async{

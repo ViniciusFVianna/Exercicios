@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/sql/entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Carro extends Entity {
   int id;
@@ -22,6 +23,13 @@ class Carro extends Entity {
       this.urlVideo,
       this.latitude,
       this.longitude});
+
+  laLng() {
+    return LatLng(
+      latitude == null || latitude.isEmpty ? 0.0 : double.parse(latitude),
+      longitude == null || longitude.isEmpty ? 0.0 : double.parse(longitude),
+    );
+  }
 
   Carro.fromMap(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,20 +61,20 @@ class Carro extends Entity {
     return 'Carro{id: $id, nome: $nome, tipo: $tipo, descricao: $descricao, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude}';
   }
 
-  String toJson(){
+  String toJson() {
     String json = jsonEncode(toMap());
     return json;
   }
 }
 
-class CarroEvent extends Event{
-String acao;
-String tipo;
+class CarroEvent extends Event {
+  String acao;
+  String tipo;
 
-CarroEvent(this.acao, this.tipo);
+  CarroEvent(this.acao, this.tipo);
 
-@override
-String toString(){
-  return 'CarroEvent{ acao: $acao, tipo: $tipo }';
-}
+  @override
+  String toString() {
+    return 'CarroEvent{ acao: $acao, tipo: $tipo }';
+  }
 }
