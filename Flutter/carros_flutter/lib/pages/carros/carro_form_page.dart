@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/carros_api.dart';
+import 'package:carrosflutter/services/upload_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
+import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CarroFormPage extends StatefulWidget {
   final Carro carro;
@@ -25,6 +30,8 @@ class _CarroFormPageState extends State<CarroFormPage> {
   final tTipo = TextEditingController();
 
   int _radioIndex = 0;
+  File _image;
+  File _imaeTemp;
 
   var _showProgress = false;
 
@@ -121,14 +128,23 @@ class _CarroFormPageState extends State<CarroFormPage> {
   }
 
   _headerFoto() {
-    return carro != null
-        ? CachedNetworkImage(
-            imageUrl: carro.urlFoto,
-          )
-        : Image.asset(
-            "assets/images/camera.png",
-            height: 150,
-          );
+    return InkWell(
+      onTap: _onClickCamera,
+      child: _image != null
+          ? Image.file(
+              _image,
+              height: 150,
+            )
+          : carro != null
+              ? CachedNetworkImage(
+                  imageUrl: carro.urlFoto,
+                  height: 150,
+                )
+              : Image.asset(
+                  "assets/images/camera.png",
+                  height: 150,
+                ),
+    );
   }
 
   _radioTipo() {
@@ -212,13 +228,17 @@ class _CarroFormPageState extends State<CarroFormPage> {
     });
 
     print("Salvar o carro $c");
-    ApiResponse<bool> response = await CarrosApi.save(c);
+    ApiResponse<bool> response = await CarrosApi.save(c, _image);
     if (response.ok) {
       alert(context, "Carro salvo com sucesso", callback: () {
+        EventBus.get(context).sendEvent(CarroEvent('carro_salvo', c.tipo));
         pop(context);
       });
     } else {
-      alert(context, response.msg,);
+      alert(
+        context,
+        response.msg,
+      );
     }
 
     await Future.delayed(Duration(seconds: 3));
@@ -228,5 +248,18 @@ class _CarroFormPageState extends State<CarroFormPage> {
     });
 
     print("Fim.");
+  }
+
+  void _onClickCamera() async {
+    _imaeTemp = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = _imaeTemp;
+    });
+  }
+
+  void _onClickUpload() {
+    if (_image != null) {
+      UploadService.upload(_image);
+    }
   }
 }

@@ -6,6 +6,7 @@ import 'package:carrosflutter/services/carros_api.dart';
 import 'package:carrosflutter/services/favorito_service.dart';
 import 'package:carrosflutter/services/loripsum_api.dart';
 import 'package:carrosflutter/utils/alert.dart';
+import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/text.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class _CarroPageState extends State<CarroPage> {
   _onClickMapa() {}
 
   _onclickFavorito() async {
-    bool favorito = await FavoritoService.favoritar(carro);
+    bool favorito = await FavoritoService.favoritar(context, carro);
 
     setState(() {
       color = favorito ? Colors.red : Colors.grey;
@@ -111,6 +112,7 @@ class _CarroPageState extends State<CarroPage> {
     if (response.ok) {
 
       alert(context, "Carro excluído com sucesso!", callback: () {
+        EventBus.get(context).sendEvent(CarroEvent("carro_deletado", carro.tipo));
         pop(context);
       });
     }
@@ -122,6 +124,7 @@ class _CarroPageState extends State<CarroPage> {
       child: ListView(
         children: <Widget>[
           CachedNetworkImage(
+            height: 150,
             imageUrl: widget.carro.urlFoto ?? "http://www.livroandroid.com.br/livro/carros/classicos/Cadillac_Deville_Convertible.png",
           ),
           _bloco1(),

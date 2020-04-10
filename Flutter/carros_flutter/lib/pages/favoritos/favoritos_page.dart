@@ -3,6 +3,7 @@ import 'package:carrosflutter/pages/favoritos/favoritos_bloc.dart';
 import 'package:carrosflutter/widgets/carros_listview.dart';
 import 'package:carrosflutter/widgets/text_error.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FavoritosPage extends StatefulWidget {
   @override
@@ -15,18 +16,11 @@ class _FavoritosPageState extends State<FavoritosPage>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
-  final _bloc = FavoritosBloc();
-
   @override
   void initState() {
     super.initState();
-    _bloc.fetch();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.dispose();
+    FavoritosBloc favoritosBloc = Provider.of<FavoritosBloc>(context, listen: false);
+    favoritosBloc.fetch();
   }
 
   @override
@@ -36,8 +30,9 @@ class _FavoritosPageState extends State<FavoritosPage>
   }
 
   _body() {
+    FavoritosBloc favoritosBloc = Provider.of<FavoritosBloc>(context);
     return StreamBuilder(
-      stream: _bloc.stream,
+      stream: favoritosBloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return TextError(
@@ -58,6 +53,7 @@ class _FavoritosPageState extends State<FavoritosPage>
   }
 
   Future<void> _onRefresh(){
-    return _bloc.fetch();
+    FavoritosBloc favoritosBloc = Provider.of<FavoritosBloc>(context, listen: false);
+    return favoritosBloc.fetch();
   }
 }

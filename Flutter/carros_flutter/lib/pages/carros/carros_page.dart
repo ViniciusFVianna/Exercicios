@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/pages/carros/carros_bloc.dart';
+import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/widgets/carros_listview.dart';
 import 'package:carrosflutter/widgets/text_error.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CarrosPage extends StatefulWidget {
   String tipo;
@@ -22,6 +24,7 @@ class _CarrosPageState extends State<CarrosPage>
   bool get wantKeepAlive => true;
 
   List<Carro> carros;
+  StreamSubscription<Event> subscription;
   String get tipo => widget.tipo;
   final _bloc = CarrosBloc();
 
@@ -29,12 +32,15 @@ class _CarrosPageState extends State<CarrosPage>
   void initState() {
     super.initState();
     _bloc.fetch(tipo);
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.dispose();
+    final bus = EventBus.get(context);
+    subscription = bus.stream.listen((Event e) {
+      print("Event $e");
+      CarroEvent carroEvent = e;
+      if (carroEvent.tipo == tipo) {
+        _bloc.fetch(tipo);
+      }
+    });
   }
 
   @override
@@ -64,13 +70,19 @@ class _CarrosPageState extends State<CarrosPage>
         }
         List<Carro> carros = snapshot.data;
         return RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: CarrosListView(carros));
+            onRefresh: _onRefresh, child: CarrosListView(carros));
       },
     );
   }
-  
-  Future<void> _onRefresh(){
+
+  Future<void> _onRefresh() {
     return _bloc.fetch(tipo);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+    subscription.cancel();
   }
 }
