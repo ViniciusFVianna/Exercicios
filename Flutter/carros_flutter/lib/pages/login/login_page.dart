@@ -1,6 +1,7 @@
 import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/pages/home/home_page.dart';
 import 'package:carrosflutter/pages/login/login_bloc.dart';
+import 'package:carrosflutter/register/regiter_page.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/firebase_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
@@ -75,38 +76,55 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             StreamBuilder<bool>(
-              stream: _bloc.stream,
-              initialData: false,
-              builder: (context, snapshot) {
-                return AppButton(
-                  "Login",
-                  onPressed: _onClickLogin,
-                  showProgress: snapshot.data,
-                );
-              }
+                stream: _bloc.stream,
+                initialData: false,
+                builder: (context, snapshot) {
+                  return AppButton(
+                    "Login",
+                    onPressed: _onClickLogin,
+                    showProgress: snapshot.data,
+                  );
+                }),
+            Container(
+              height: 46,
+              margin: EdgeInsets.only(top: 20),
+              child: GoogleSignInButton(
+                onPressed: _onClickGoogle,
+              ),
             ),
-            Container(height: 46,
-            margin: EdgeInsets.only(top: 20),
-            child: GoogleSignInButton(
-              onPressed: _onClickGoogle,
-            ),),
+            Container(
+              height: 46,
+              margin: EdgeInsets.only(top: 20),
+              child: FlatButton(
+                child: Text(
+                  "Cadastre-se",
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                    decoration: TextDecoration.underline,
+                    fontSize: 22,
+                    fontWeight: FontWeight.normal
+                  ),
+                ),
+                onPressed: () => push(context, RegisterPage(), replase: false),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _onClickGoogle() async{
+  void _onClickGoogle() async {
     final service = FirebaseService();
     ApiResponse response = await service.loginGoogle();
-    if(response.ok){
+    if (response.ok) {
       push(context, HomePage(), replase: true);
-    }else{
+    } else {
       alert(context, response.msg);
     }
   }
 
-  void _onClickLogin() async{
+  void _onClickLogin() async {
     bool formOk = _formKey.currentState.validate();
     if (!formOk) {
       return;
@@ -116,18 +134,18 @@ class _LoginPageState extends State<LoginPage> {
     String senha = _tSenha.text;
     print("login >> $login \nsenha >> $senha");
 
-   ApiResponse response = await _bloc.login(login, senha);
+    ApiResponse response = await _bloc.login(login, senha);
 
-   if(response.ok) {
-     Usuario user = response.result;
+    if (response.ok) {
+      Usuario user = response.result;
 
-     print(">> $user");
+      print(">> $user");
 
-     push(context, HomePage(), replase: true);
-   }else {
-     print(response.msg);
-     alert(context, response.msg);
-   }
+      push(context, HomePage(), replase: true);
+    } else {
+      print(response.msg);
+      alert(context, response.msg);
+    }
   }
 
   String _validateLogin(String value) {
@@ -146,5 +164,4 @@ class _LoginPageState extends State<LoginPage> {
     }
     return null;
   }
-
 }

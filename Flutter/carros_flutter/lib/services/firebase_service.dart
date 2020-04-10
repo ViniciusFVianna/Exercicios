@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:carrosflutter/models/usuario.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseService {
@@ -26,9 +27,9 @@ class FirebaseService {
       // Login no firebase
       AuthResult result = await _auth.signInWithCredential(credential);
       final FirebaseUser fUser = result.user;
-      print("Firebase Nome: " + fUser.displayName);
-      print("Firebase Email: " + fUser.email);
-      print("firebase Foto: " + fUser.photoUrl);
+      print("Firebase Nome: ${fUser.displayName}");
+      print("Firebase Email: ${fUser.email}");
+      print("firebase Foto: ${fUser.photoUrl}");
 
       final user = Usuario(
         nome: fUser.displayName,
@@ -45,6 +46,63 @@ class FirebaseService {
       return ApiResponse.error(msg: "Não foi possível fazer o login");
     }
   }
+
+  Future<ApiResponse> login(String email, String password)async{
+    try {
+          // Login no firebase
+      AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final FirebaseUser fUser = result.user;
+      print("Firebase Nome: ${fUser.displayName}");
+      print("Firebase Email: ${fUser.email}");
+      print("firebase Foto: ${fUser.photoUrl}");
+
+      final user = Usuario(
+        nome: fUser.displayName,
+        login: fUser.email,
+        email: fUser.email,
+        urlFoto: fUser.photoUrl,
+      );
+      user.save();
+
+      // Resposta genérica
+      return ApiResponse.ok();
+    } catch (error) {
+      print("Firebase error $error");
+      return ApiResponse.error(msg: "Não foi possível fazer o login");
+    }
+  }
+
+  Future<ApiResponse> cadastrar(String nome, String email, String senha) async {
+    try {
+      // Usuario do Firebase
+      AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
+      final FirebaseUser fUser = result.user;
+      print("Firebase Nome: ${fUser.displayName}");
+      print("Firebase Email: ${fUser.email}");
+      print("Firebase Foto: ${fUser.photoUrl}");
+
+      // Dados para atualizar o usuário
+      final userUpdateInfo = UserUpdateInfo();
+      userUpdateInfo.displayName = nome;
+      userUpdateInfo.photoUrl = "https://s3-sa-east-1.amazonaws.com/livetouch-temp/livrows/foto.png";
+
+      fUser.updateProfile(userUpdateInfo);
+
+      // Resposta genérica
+      return ApiResponse.ok(msg:"Usuário criado com sucesso");
+    } catch(error) {
+      print(error);
+
+      if(error is PlatformException) {
+        print("Error Code ${error.code}");
+
+        return ApiResponse.error(msg: "Erro ao criar um usuário.\n\n${error.message}");
+      }
+
+      return ApiResponse.error(msg: "Não foi possível criar um usuário.");
+    }
+  }
+
 
   Future<void> logOut() async{
     await _auth.signOut();
