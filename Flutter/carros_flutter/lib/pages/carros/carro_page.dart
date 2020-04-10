@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrosflutter/models/carro.dart';
 import 'package:carrosflutter/pages/carros/carro_form_page.dart';
+import 'package:carrosflutter/pages/video_page.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/carros_api.dart';
 import 'package:carrosflutter/services/favorito_service.dart';
@@ -10,6 +11,7 @@ import 'package:carrosflutter/utils/event_bus.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CarroPage extends StatefulWidget {
   Carro carro;
@@ -31,7 +33,7 @@ class _CarroPageState extends State<CarroPage> {
   void initState() {
     super.initState();
     _loreipsumBloc.fetch();
-    FavoritoService.isFavorito(carro).then((favorito){
+    FavoritoService.isFavorito(carro).then((favorito) {
       setState(() {
         color = favorito ? Colors.red : Colors.grey;
       });
@@ -56,7 +58,7 @@ class _CarroPageState extends State<CarroPage> {
             ),
             IconButton(
               icon: Icon(Icons.videocam),
-              onPressed: _onClickVideo,
+              onPressed: () {_onClickVideo(context);},
             ),
             PopupMenuButton<String>(
                 onSelected: _onClickPopupMenu,
@@ -81,7 +83,18 @@ class _CarroPageState extends State<CarroPage> {
         body: _body());
   }
 
-  _onClickVideo() {}
+  _onClickVideo(context) {
+    if (carro.urlVideo != null && carro.urlVideo.isNotEmpty) {
+      // launch(carro.urlVideo);
+      push(context, VideoPage(carro));
+    } else {
+      alert(
+        context,
+        "Este carro não possiu nenhum vídeo",
+        title: "Erro",
+      );
+    }
+  }
 
   _onClickMapa() {}
 
@@ -110,9 +123,9 @@ class _CarroPageState extends State<CarroPage> {
   void _deletar() async {
     ApiResponse<bool> response = await CarrosApi.delete(carro);
     if (response.ok) {
-
       alert(context, "Carro excluído com sucesso!", callback: () {
-        EventBus.get(context).sendEvent(CarroEvent("carro_deletado", carro.tipo));
+        EventBus.get(context)
+            .sendEvent(CarroEvent("carro_deletado", carro.tipo));
         pop(context);
       });
     }
@@ -125,7 +138,8 @@ class _CarroPageState extends State<CarroPage> {
         children: <Widget>[
           CachedNetworkImage(
             height: 150,
-            imageUrl: widget.carro.urlFoto ?? "http://www.livroandroid.com.br/livro/carros/classicos/Cadillac_Deville_Convertible.png",
+            imageUrl: widget.carro.urlFoto ??
+                "http://www.livroandroid.com.br/livro/carros/classicos/Cadillac_Deville_Convertible.png",
           ),
           _bloco1(),
           Divider(),
