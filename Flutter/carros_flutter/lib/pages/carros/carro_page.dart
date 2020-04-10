@@ -33,7 +33,7 @@ class _CarroPageState extends State<CarroPage> {
   void initState() {
     super.initState();
     _loreipsumBloc.fetch();
-    FavoritoService.isFavorito(carro).then((favorito) {
+    FavoritoService().isFavorito(carro).then((favorito) {
       setState(() {
         color = favorito ? Colors.red : Colors.grey;
       });
@@ -105,7 +105,7 @@ push(context, MapaPage(carro));
   }
 
   _onclickFavorito() async {
-    bool favorito = await FavoritoService.favoritar(context, carro);
+    bool favorito = await FavoritoService().favoritar(carro);
 
     setState(() {
       color = favorito ? Colors.red : Colors.grey;

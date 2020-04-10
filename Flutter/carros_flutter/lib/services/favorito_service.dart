@@ -1,49 +1,62 @@
 import 'package:carrosflutter/models/carro.dart';
-import 'package:carrosflutter/models/favorito.dart';
-import 'package:carrosflutter/pages/carros/carro_dao.dart';
-import 'package:carrosflutter/pages/favoritos/favorito_dao.dart';
-import 'package:carrosflutter/pages/favoritos/favoritos_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:carrosflutter/services/firebase_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FavoritoService {
-  static Future<bool> favoritar(context, Carro c) async {
-    Favorito f = Favorito.fromCarro(c);
 
-    final dao = FavoritoDAO();
+  // Para salvar a collection dentro do usuário logado
+  get _users => Firestore.instance.collection("users");
+  get _carros => _users.document(firebaseUserUid).collection("carros");
 
-    final exists = await dao.exists(c.id);
+  // Para salvar apenas com a collection de carros
+//  get _carros => Firestore.instance.collection("carros");
 
-    if (exists) {
+  get stream => _carros.snapshots();
+
+  Future<bool> favoritar(Carro c) async {
+
+    DocumentReference docRef = _carros.document("${c.id}");
+
+    DocumentSnapshot doc = await docRef.get();
+
+    final exists = doc.exists;
+
+    if(exists) {
       // Remove dos favoritos
-      dao.delete(c.id);
+      docRef.delete();
 
-      FavoritosBloc favoritosBloc =
-          Provider.of<FavoritosBloc>(context, listen: false);
-      favoritosBloc.fetch();
       return false;
     } else {
       // Adiciona nos favoritos
-      dao.save(f);
-      FavoritosBloc favoritosBloc =
-          Provider.of<FavoritosBloc>(context, listen: false);
-      favoritosBloc.fetch();
+      docRef.setData(c.toMap());
+
       return true;
     }
   }
 
-  static Future<List<Carro>> getCarros() async {
-    // select * from carro c,favorito f where c.id = f.id
-    List<Carro> carros = await CarroDAO()
-        .query("select * from carro c,favorito f where c.id = f.id");
+  Future<bool> isFavorito(Carro c) async {
 
-    return carros;
-  }
+    DocumentReference docRef = _carros.document("${c.id}");
 
-  static Future<bool> isFavorito(Carro c) async {
-    final dao = FavoritoDAO();
+    DocumentSnapshot doc = await docRef.get();
 
-    bool exists = await dao.exists(c.id);
+    final exists = doc.exists;
 
     return exists;
+  }
+
+  Future<bool> deleteCarros() async {
+    print("Delete carros do usuário logado: $firebaseUserUid");
+
+    // Deleta os carros
+    final query = await _carros.getDocuments();
+    for(DocumentSnapshot doc in query.documents) {
+      await doc.reference.delete();
+    }
+
+    // Deleta a referencia do usuário
+    _users.document(firebaseUserUid).delete();
+
+    return true;
   }
 }

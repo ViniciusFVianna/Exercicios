@@ -5,6 +5,7 @@ import 'package:carrosflutter/register/regiter_page.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/firebase_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
+import 'package:carrosflutter/utils/firebase.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
 import 'package:carrosflutter/widgets/app_text.dart';
@@ -30,10 +31,10 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.dispose();
+@override
+  void initState() {
+    super.initState();
+    initFcm();
   }
 
   @override
@@ -163,5 +164,11 @@ class _LoginPageState extends State<LoginPage> {
       return "A senha deve ser maior de 3 digitos.";
     }
     return null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
   }
 }

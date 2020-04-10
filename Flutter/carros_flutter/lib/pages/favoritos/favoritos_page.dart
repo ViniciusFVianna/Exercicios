@@ -1,11 +1,9 @@
 import 'package:carrosflutter/models/carro.dart';
-import 'package:carrosflutter/pages/favoritos/favoritos_bloc.dart';
+import 'package:carrosflutter/services/favorito_service.dart';
 import 'package:carrosflutter/widgets/carros_listview.dart';
-import 'package:carrosflutter/widgets/text.dart';
 import 'package:carrosflutter/widgets/text_error.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class FavoritosPage extends StatefulWidget {
   @override
@@ -30,7 +28,7 @@ class _FavoritosPageState extends State<FavoritosPage>
 
   _body() {
      return StreamBuilder<QuerySnapshot>(
-     stream: Firestore.instance.collection('carros').snapshots(),
+     stream: FavoritoService().stream,
      builder: (context, snapshot) {
        if(snapshot.hasError){
          return TextError("Não foi possível buscar os carros");
