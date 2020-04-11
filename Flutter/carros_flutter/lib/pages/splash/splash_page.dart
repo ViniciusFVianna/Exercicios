@@ -25,6 +25,7 @@ class _SplashPageState extends State<SplashPage> {
       FirebaseUser fUser = values[2];
       if (fUser != null) {
         push(context, HomePage(), replase: true);
+        // push(context, LoginPage());
       } else {
         push(context, LoginPage());
       }

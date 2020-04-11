@@ -5,6 +5,7 @@ import 'package:carrosflutter/register/regiter_page.dart';
 import 'package:carrosflutter/services/api_response.dart';
 import 'package:carrosflutter/services/firebase_service.dart';
 import 'package:carrosflutter/utils/alert.dart';
+import 'package:carrosflutter/utils/finger_print.dart';
 import 'package:carrosflutter/utils/firebase.dart';
 import 'package:carrosflutter/utils/nav.dart';
 import 'package:carrosflutter/widgets/app_button.dart';
@@ -32,10 +33,24 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  FirebaseUser fUser;
+  var showFrom = false;
+
   @override
   void initState() {
     super.initState();
     // initFcm();
+    FirebaseAuth.instance.currentUser().then((fUser) {
+      setState(() {
+        this.fUser = fUser;
+        if (fUser != null) {
+          showFrom = true;
+        } else {
+          showFrom = false;
+        }
+      });
+    });
+
     RemoteConfig.instance.then((remoteConfig) {
       remoteConfig.setConfigSettings(RemoteConfigSettings(debugMode: true));
 
@@ -46,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
         print("Remote Config: $error");
       }
 
-      final mensagem = remoteConfig.getString("mensagem"); 
+      final mensagem = remoteConfig.getString("mensagem");
       print('Mensagem: $mensagem');
     });
   }
@@ -122,10 +137,33 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () => push(context, RegisterPage(), replase: false),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            Opacity(
+              opacity: fUser != null ? 1 : 0,
+              child: Container(
+                child: InkWell(
+                  child: Icon(
+                    Icons.fingerprint,
+                    color: Colors.deepPurple,
+                    size: 50,
+                  ),
+                  onTap: () => _onClickFinger(context),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _onClickFinger(context) async {
+    final ok = await FingerPrint.verify();
+    if (ok) {
+      push(context, HomePage(), replase: true);
+    }
   }
 
   void _onClickGoogle() async {
