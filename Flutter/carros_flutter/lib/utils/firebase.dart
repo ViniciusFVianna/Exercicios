@@ -19,7 +19,7 @@ void initFcm() {
       print('\n\n\n*** on message $message');
 
       String nome = message['data']['nome'];
-      print("onMessage: $nome");
+      print("onMessage : $nome");
     },
     onResume: (Map<String, dynamic> message) async {
       print('\n\n\n*** on resume $message');
