@@ -2,6 +2,8 @@ import 'package:carrosflutterweb/app_model.dart';
 import 'package:carrosflutterweb/colors.dart';
 import 'package:carrosflutterweb/pages/carros/carros_page.dart';
 import 'package:carrosflutterweb/pages/default_page.dart';
+import 'package:carrosflutterweb/pages/info_page.dart';
+import 'package:carrosflutterweb/pages/upload/upload_page.dart';
 import 'package:carrosflutterweb/pages/usuarios/usuarios_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,6 +23,8 @@ class _MenuState extends State<Menu> {
     menus.add(ItemMenu('Home', FontAwesomeIcons.home, DefaultPage()));
     menus.add(ItemMenu('Carros', FontAwesomeIcons.car, CarrosPage()));
     menus.add(ItemMenu('Usuários', FontAwesomeIcons.user, UsuariosPage()));
+    menus.add(ItemMenu('Upload', FontAwesomeIcons.upload, UploadPage()));
+    menus.add(ItemMenu("Info", FontAwesomeIcons.info, InfoPage()));
   }
 
   @override

@@ -30,7 +30,7 @@ class _BreadCrumbState extends State<BreadCrumb> {
                 child: Icon(index == 0 ? FontAwesomeIcons.home : FontAwesomeIcons.chevronRight,
                   color: AppColors.blue,),
               ) ,
-              Text(info.title, style: TextStyle(fontSize: 20),)
+              Text(info.title ?? 'Item sem nome', style: TextStyle(fontSize: 20),)
             ],
           ),
         );
