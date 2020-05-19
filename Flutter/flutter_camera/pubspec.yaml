@@ -15,12 +15,15 @@ dependencies:
   # Piker de imagem
   image_picker: ^0.6.4
   http: ^0.12.0+4
+  camera: ^0.5.2+1
+  permission_handler: ^3.3.0
+  path_provider: ^0.5.0+1
+  darwin_camera: ^0.0.2
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
 
 flutter:
 
