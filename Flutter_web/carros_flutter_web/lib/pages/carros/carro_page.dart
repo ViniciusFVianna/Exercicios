@@ -38,9 +38,6 @@ class _CarroPageState extends State<CarroPage> {
             widget.carro.nome ?? '',
             overflow: TextOverflow.ellipsis,
           ),
-          RaisedButton(
-              child: Text('Voltar'),
-              onPressed: _onClickVoltar),
         ],
       ),
     );

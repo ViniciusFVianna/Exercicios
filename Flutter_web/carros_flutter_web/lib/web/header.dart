@@ -1,6 +1,7 @@
 import 'package:carrosflutterweb/domain/user.dart';
 import 'package:carrosflutterweb/utlis/alert.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Header extends StatefulWidget {
   @override
