@@ -24,4 +24,3 @@ class ImcBloc {
       result = "Obesidade Grau III (${imc.toStringAsPrecision(2)})";
     }
   }
-}
